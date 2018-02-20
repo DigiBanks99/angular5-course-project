@@ -1,15 +1,26 @@
 import { EventEmitter } from '@angular/core';
 
 import { Recipe } from './recipe.model'
+import { Ingredient } from '../shared/ingredient.model';
 
 export class RecipeService {
   private recipes: Recipe[] = [
     new Recipe('Mixed pepper crusted steak with mushroom salad',
     'Keep summer cooking easy with this clever pepper-crusted steak and salad meal.',
-    'http://img.taste.com.au/-OoAuH3l/w643-h428-cfill-q90/taste/2016/11/mixed-pepper-crusted-steak-with-mushroom-salad-87602-1.jpeg'),
+    'http://img.taste.com.au/-OoAuH3l/w643-h428-cfill-q90/taste/2016/11/mixed-pepper-crusted-steak-with-mushroom-salad-87602-1.jpeg',
+    [
+      new Ingredient('Beef Fillet', 1),
+      new Ingredient('Pepper', 5),
+      new Ingredient('Mushroom', 20)
+    ]),
     new Recipe('Pasta a la Italian',
     'Some tasty Italian Pasta to make your mouth water.',
-    'https://cdn.pixabay.com/photo/2017/11/11/10/07/pasta-2938710_960_720.jpg')
+    'https://cdn.pixabay.com/photo/2017/11/11/10/07/pasta-2938710_960_720.jpg',
+    [
+      new Ingredient('Tagliatelle', 200),
+      new Ingredient('Basil', 5),
+      new Ingredient('Mozzarella Cheese', 3)
+    ])
   ];
 
   public recipeSelected = new EventEmitter<Recipe>();
