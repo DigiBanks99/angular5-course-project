@@ -1,8 +1,10 @@
-import { EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable } from '@angular/core';
 
 import { Recipe } from './recipe.model'
 import { Ingredient } from '../shared/ingredient.model';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
+@Injectable()
 export class RecipeService {
   private recipes: Recipe[] = [
     new Recipe('Mixed pepper crusted steak with mushroom salad',
@@ -25,7 +27,15 @@ export class RecipeService {
 
   public recipeSelected = new EventEmitter<Recipe>();
 
+  constructor(private shoppingListService: ShoppingListService) { }
+
   getRecipes(): Recipe[] {
     return this.recipes.slice(); // same as cloning the recipes array
+  }
+
+  sendToShoppingList(ingredients: Ingredient[]) {
+    if (ingredients != null && ingredients.length > 0) {
+      this.shoppingListService.addIngredients(ingredients);
+    }
   }
 }
