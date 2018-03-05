@@ -16,7 +16,7 @@ const routes: Routes = [
       { path: '', component: RecipeStartComponent },
       { path: 'new', component: RecipeEditComponent },
       { path: ':id', component: RecipeDetailComponent },
-      { path: 'edit/:id', component: RecipeEditComponent }
+      { path: ':id/edit', component: RecipeEditComponent } // we add edit after :id to keep the active class in the list
     ]
   }
 ];
