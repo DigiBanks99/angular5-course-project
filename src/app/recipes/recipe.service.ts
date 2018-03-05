@@ -33,6 +33,10 @@ export class RecipeService {
     return this.recipes.slice(); // same as cloning the recipes array
   }
 
+  getRecipe(id: number): Recipe {
+    return this.recipes[id];
+  }
+
   sendToShoppingList(ingredients: Ingredient[]) {
     if (ingredients != null && ingredients.length > 0) {
       this.shoppingListService.addIngredients(ingredients);
