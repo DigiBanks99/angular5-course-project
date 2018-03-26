@@ -20,7 +20,7 @@
       </div>
       <div class="row col-xs-12">
         <button class="btn btn-success" type="submit" [disabled]="!f.valid">{{editItem ? 'Update' : 'Add'}}</button>
-        <button class="btn btn-danger" type="button" (click)="deleteIngredient()">Delete</button>
+        <button class="btn btn-danger" type="button" (click)="deleteIngredient(f)" *ngIf="editMode">Delete</button>
         <button class="btn btn-primary" type="button" (click)="reset(f)">Clear</button>
       </div>
     </form>

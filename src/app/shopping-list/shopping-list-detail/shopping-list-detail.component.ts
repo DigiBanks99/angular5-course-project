@@ -13,10 +13,10 @@ import { ShoppingListService } from '../shopping-list.service';
 })
 export class ShoppingListDetailComponent implements OnInit, OnDestroy {
   private editingSubscription: Subscription;
-  private editMode: boolean;
   private editIndex: number;
 
   @ViewChild('f') shoppingListForm: NgForm;
+  public editMode: boolean;
   public editItem: Ingredient;
 
   constructor(private shoppingListService: ShoppingListService) {
@@ -75,10 +75,11 @@ export class ShoppingListDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  deleteIngredient() {
+  deleteIngredient(form: NgForm) {
     if (this.editIndex < 0)
       return;
     this.shoppingListService.deleteIngredient(this.editIndex);
+    this.reset(form);
   }
 
   reset(form: NgForm) {
