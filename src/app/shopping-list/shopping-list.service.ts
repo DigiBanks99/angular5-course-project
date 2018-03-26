@@ -11,9 +11,14 @@ export class ShoppingListService {
   ];
 
   public ingredientsChanged = new Subject<Ingredient[]>();
+  public editingStarted = new Subject<number>();
 
   getIngredients(): Ingredient[] {
     return this.ingredients.slice(); // Effectively clones the array (to avoid returning a reference to the array)
+  }
+
+  getIngredient(index: number): Ingredient {
+    return this.ingredients[index];
   }
 
   addIngredient(ingredient: Ingredient) {
@@ -23,6 +28,11 @@ export class ShoppingListService {
 
   addIngredients(ingredients: Ingredient[]) {
     this.ingredients.push(...ingredients);
+    this.ingredientsChanged.next(this.ingredients.slice());
+  }
+
+  updateIngredient(index: number, ingredient: Ingredient) {
+    this.ingredients[index] = ingredient;
     this.ingredientsChanged.next(this.ingredients.slice());
   }
 }
