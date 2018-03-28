@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
-import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { RecipeService } from '../recipe.service';
+import { Ingredient } from '../../shared/ingredient.model';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -27,8 +28,49 @@ export class RecipeEditComponent implements OnInit {
     return <FormControl[]>(<FormArray>this.recipeForm.get('ingredients')).controls;
   }
 
+  getIngredientsControl(i: number): AbstractControl {
+    return (<FormArray>this.recipeForm.get('ingredients')).controls[i];
+  }
+
+  getErrorIngredientsCtrl(i: number, ctrlName: string) {
+    const errors = this.getIngredientsControl(i).get(ctrlName).errors;
+    return errors;
+  }
+
+  inErrorNameCtrl(): boolean {
+    const nameCtrl = this.recipeForm.get('name');
+    if (!nameCtrl)
+      return false;
+    return nameCtrl.touched && !nameCtrl.valid;
+  }
+
+  inErrorImagePathCtrl(): boolean {
+    const imagePathCtrl = this.recipeForm.get('imagePathCtrl');
+    if (!imagePathCtrl)
+      return false;
+    return imagePathCtrl.touched && !imagePathCtrl.valid;
+  }
+
+  inErrorDescriptionCtrl(): boolean {
+    const descriptionCtrl = this.recipeForm.get('descriptionCtrl');
+    if (!descriptionCtrl)
+      return false;
+    return descriptionCtrl.touched && !descriptionCtrl.valid;
+  }
+
+  inErrorIngredientCtrl(i): boolean {
+    const ingredientCtrl = (<FormArray>this.recipeForm.get('ingredients')).controls[i];
+    if (!ingredientCtrl)
+      return false;
+    return ingredientCtrl.touched && !ingredientCtrl.valid;
+  }
+
   onDeleteIngredient(index: number) {
 
+  }
+
+  onAddIngredient() {
+    (<FormArray>this.recipeForm.get('ingredients')).push(this.getIngredient(true, null));
   }
 
   onSubmit() {
@@ -50,10 +92,7 @@ export class RecipeEditComponent implements OnInit {
 
         if (recipe['ingredients']) {
           for (const ingredient of recipe.ingredients) {
-            recipeIngredients.push(new FormGroup({
-                'name': new FormControl(ingredient.name),
-                'amount': new FormControl(ingredient.amount)
-              }));
+            recipeIngredients.push(this.getIngredient(false, ingredient));
           }
         }
       }
@@ -64,6 +103,28 @@ export class RecipeEditComponent implements OnInit {
       'imagePath': new FormControl(recipeImagePath, [Validators.required]),
       'description': new FormControl(recipeDescription, [Validators.required]),
       'ingredients': recipeIngredients
+    });
+  }
+
+  private getIngredient(isNew: boolean, ingredient: Ingredient): FormGroup {
+    let nameValue: string;
+    let amountValue: number;
+
+    if (isNew) {
+      nameValue = null;
+      amountValue = null;
+    } else {
+      if (ingredient === null) {
+        throw new Error('ingredient is required');
+      }
+
+      nameValue = ingredient.name;
+      amountValue = ingredient.amount;
+    }
+
+    return new FormGroup({
+      'name': new FormControl(nameValue, Validators.required),
+      'amount': new FormControl(amountValue, Validators.required)
     });
   }
 }

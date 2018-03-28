@@ -9,17 +9,23 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <div class="form-group">
+          <div class="form-group" [ngClass]="{'has-error': inErrorNameCtrl()}">
             <label for="name" class="control-label">Name</label>
             <input type="text" id="name" class="form-control" formControlName="name">
+            <span class="help-block" *ngIf="inErrorNameCtrl()">
+              <span *ngIf="recipeForm.get('name').errors['required']">A name is required.</span>
+            </span>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <div class="form-group">
+          <div class="form-group" [ngClass]="{'has-error': inErrorImagePathCtrl()}">
             <label for="imagePath" class="control-label">Image URL</label>
             <input type="text" id="imagePath" class="form-control" formControlName="imagePath">
+            <span class="help-block" *ngIf="inErrorImagePathCtrl()">
+              <span *ngIf="recipeForm.get('imagePath').errors['required']">A name is required.</span>
+            </span>
           </div>
         </div>
       </div>
@@ -30,24 +36,38 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <div class="form-group">
+          <div class="form-group" [ngClass]="{'has-error': inErrorDescriptionCtrl()}">
             <label for="description" class="control-label">Description</label>
             <textarea id="description" class="form-control" rows="6" formControlName="description"></textarea>
+            <span class="help-block" *ngIf="inErrorDescriptionCtrl()">
+              <span *ngIf="recipeForm.get('description').errors['required']">A name is required.</span>
+            </span>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-xs-12" formArrayName="ingredients">
           <label class="control-label">Ingredients</label>
-          <div class="row" *ngFor="let ingredientCtrl of getIngredientsControls(); let i = index" [formGroupName]="i">
-            <div class="col-xs-8">
-              <input type="text" class="form-control" formControlName="name">
+          <div class="row">
+            <div class="col-xs-12">
+              <button type="button" class="btn btn-success" (click)="onAddIngredient()">Add Ingredient</button>
             </div>
-            <div class="col-xs-2">
-              <input type="number" class="form-control" formControlName="amount">
-            </div>
-            <div class="col-xs-2">
-              <button type="button" class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+          </div>
+          <div class="row recipe-ingredient" *ngFor="let ingredientCtrl of getIngredientsControls(); let i = index" [formGroupName]="i">
+            <div class="form-group" [ngClass]="{'has-error': inErrorIngredientCtrl(i)}">
+              <div class="col-xs-8">
+                <input type="text" class="form-control" formControlName="name">
+              </div>
+              <div class="col-xs-2">
+                <input type="number" class="form-control" formControlName="amount">
+              </div>
+              <div class="col-xs-2">
+                <button type="button" class="btn btn-danger" (click)="onDeleteIngredient(i)">X</button>
+              </div>
+              <span class="col-xs-12 help-block" *ngIf="inErrorIngredientCtrl(i)">
+                <div *ngIf="getErrorIngredientsCtrl(i, 'name') !== null && getErrorIngredientsCtrl(i, 'name')['required']">A name is required.</div>
+                <div *ngIf="getErrorIngredientsCtrl(i, 'amount') != null && getErrorIngredientsCtrl(i, 'amount')['required']">An amount is required.</div>
+              </span>
             </div>
           </div>
         </div>
