@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
+
 import { RecipeService } from '../recipe.service';
+import { Recipe } from '../recipe.model';
 import { Ingredient } from '../../shared/ingredient.model';
 
 @Component({
@@ -14,7 +16,7 @@ export class RecipeEditComponent implements OnInit {
   editMode: boolean;
   recipeForm: FormGroup;
 
-  constructor(private route: ActivatedRoute, private recipeService: RecipeService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private recipeService: RecipeService) { }
 
   ngOnInit() {
     this.route.params.subscribe((params: Params) => {
@@ -66,7 +68,6 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onDeleteIngredient(index: number) {
-
   }
 
   onAddIngredient() {
@@ -74,7 +75,24 @@ export class RecipeEditComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.recipeForm);
+    const recipe: Recipe = new Recipe(
+      this.recipeForm.value['name'],
+      this.recipeForm.value['description'],
+      this.recipeForm.value['imagePath'],
+      this.recipeForm.value['ingredients']
+    );
+
+    if (this.editMode) {
+      this.recipeService.updateRecipe(this.id, recipe);
+    } else {
+      this.recipeService.addRecipe(recipe);
+    }
+
+    this.navigateBack();
+  }
+
+  onCancel() {
+    this.navigateBack();
   }
 
   private initForm() {
@@ -124,7 +142,11 @@ export class RecipeEditComponent implements OnInit {
 
     return new FormGroup({
       'name': new FormControl(nameValue, Validators.required),
-      'amount': new FormControl(amountValue, Validators.required)
+      'amount': new FormControl(amountValue, [Validators.required, Validators.pattern(/^[1-9]+[0-9]*$/)])
     });
+  }
+
+  private navigateBack() {
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 }

@@ -3,8 +3,8 @@
     <form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
       <div class="row">
         <div class="col-xs-12">
-          <button type="submit" class="btn btn-success">Save</button>
-          <button type="button" class="btn btn-danger">Cancel</button>
+          <button type="submit" class="btn btn-success" [disabled]="!recipeForm.valid">Save</button>
+          <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
         </div>
       </div>
       <div class="row">
@@ -67,6 +67,7 @@
               <span class="col-xs-12 help-block" *ngIf="inErrorIngredientCtrl(i)">
                 <div *ngIf="getErrorIngredientsCtrl(i, 'name') !== null && getErrorIngredientsCtrl(i, 'name')['required']">A name is required.</div>
                 <div *ngIf="getErrorIngredientsCtrl(i, 'amount') != null && getErrorIngredientsCtrl(i, 'amount')['required']">An amount is required.</div>
+                <div *ngIf="getErrorIngredientsCtrl(i, 'amount') != null && getErrorIngredientsCtrl(i, 'amount')['pattern']">Amount must be larger than 0.</div>
               </span>
             </div>
           </div>
