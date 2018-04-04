@@ -18,7 +18,7 @@ export class RecipeService {
     ]),
     new Recipe('Pasta a la Italian',
     'Some tasty Italian Pasta to make your mouth water.',
-    'https://cdn.pixabay.com/photo/2017/11/11/10/07/pasta-2938710_960_720.jpg',
+    'https://c1.staticflickr.com/6/5262/5863855957_bed01c083c_b.jpg',
     [
       new Ingredient('Tagliatelle', 200),
       new Ingredient('Basil', 5),

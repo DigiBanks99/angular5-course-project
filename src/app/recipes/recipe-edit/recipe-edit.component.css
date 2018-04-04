@@ -1,3 +1,7 @@
 .recipe-ingredient {
   margin-top: 10px;
 }
+
+.recipe-ingredient:last-child {
+  margin-bottom: 20px;
+}
